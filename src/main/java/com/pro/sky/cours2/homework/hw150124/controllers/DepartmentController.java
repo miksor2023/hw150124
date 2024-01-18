@@ -5,6 +5,7 @@ import com.pro.sky.cours2.homework.hw150124.services.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/department")
@@ -27,13 +28,21 @@ public class DepartmentController {
         return departmentService.getDepartmentEmployeeList(id);
     }
     @GetMapping("/employees")
-    public Collection getEmployeeListByDepartments(){
-        return departmentService.getEmployeeListByDepartments();
+    public Map getEmployeeListByDepartment(){
+        return departmentService.getEmployeeListByDepartment();
     }
 
     @GetMapping("/{id}/salary/sum")
     public Double getDepartmentSalarySum(@PathVariable Integer id){
         return departmentService.getDepartmentSalarySum(id);
+    }
+    @GetMapping("/{id}/salary/max")
+    public Double getMaxSalaryInDept(@PathVariable Integer id){
+        return departmentService.getMaxSalaryInDept(id);
+    }
+    @GetMapping("/{id}/salary/min")
+    public Double getMinSalaryInDept(@PathVariable Integer id){
+        return departmentService.getMinSalaryInDept(id);
     }
 
 //    @GetMapping("/min-salary")
