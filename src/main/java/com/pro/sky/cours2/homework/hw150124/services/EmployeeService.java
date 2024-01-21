@@ -6,13 +6,16 @@ import com.pro.sky.cours2.homework.hw150124.exceptions.EmployeeStorageIsFullExce
 import com.pro.sky.cours2.homework.hw150124.model.Employee;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class EmployeeService {
-    public Map<String, Employee> employeeMap = new HashMap<>();
+    private Map<String, Employee> employeeMap = new HashMap<>();
+
+    public Map<String, Employee> getEmployeeMap() {
+        return employeeMap;
+    }
+
     private static int maxEmployeeQty = 10;
     //метод добавляет сотрудника
 
@@ -50,7 +53,7 @@ public class EmployeeService {
         }
     }
 
-    //метод возвращает строку со списком всех сотрудников
+    //тестовый метод возвращает коллекцию (set of values) мапы emoloyeeMap
     public Collection<Employee> returnAllEmployeeList() {
         return employeeMap.values();
     }

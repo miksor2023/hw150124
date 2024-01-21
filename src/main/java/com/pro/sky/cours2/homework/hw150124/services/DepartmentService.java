@@ -1,5 +1,6 @@
 package com.pro.sky.cours2.homework.hw150124.services;
 
+import com.pro.sky.cours2.homework.hw150124.exceptions.InvalidDepartmentNumberException;
 import com.pro.sky.cours2.homework.hw150124.model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +17,23 @@ public class DepartmentService {
     }
 
     //метод возвращает список сотрудников по заданному отделу
-    public List<Employee> getDepartmentEmployeeList(Integer department) {
-            List<Employee> deptEmployees = employeeService.employeeMap.values().stream()
+    public List<Employee> getDepartmentEmployeeList(Integer department) throws InvalidDepartmentNumberException {
+        if(employeeService.getEmployeeMap().values().stream().//проверка на корректный номер отдела
+                map(employee -> employee.getDepartment()).
+                collect(Collectors.toList()).contains(department)) {
+            List<Employee> deptEmployees = employeeService.getEmployeeMap().values().stream()
                     .filter(employee -> employee.getDepartment() == department)
+                    .sorted((e1, e2) -> e1.getSalary().compareTo(e2.getSalary()))
                     .collect(Collectors.toList());
             return deptEmployees;
+        } else {
+            throw new InvalidDepartmentNumberException("ОШИБКА: Отдела с таким номером не существует");
+        }
     }
     //метод возвращает список сотрудников, отсортированный по отделам
-    public Map getEmployeeListByDepartment(){
-        Map<Integer,List<Employee>> grouppedByDept = employeeService.employeeMap.values().stream()
+    public Map getEmployeeListSortedByDepartment(){
+        Map<Integer,List<Employee>> grouppedByDept = employeeService.getEmployeeMap().values().stream()
+                .sorted((e1, e2) -> e1.getSalary().compareTo(e2.getSalary()))
                 .collect(Collectors.groupingBy(Employee::getDepartment));
         return grouppedByDept;
     }
@@ -49,11 +58,9 @@ public class DepartmentService {
 
     //метод возвращает сумму зарпоат по заданному отделу
     public Double getDepartmentSalarySum(Integer department){
-        Double departmentSalarySum = employeeService.employeeMap.values().stream()
-                .filter(employee -> employee.getDepartment() == department)
+        Double departmentSalarySum = getDepartmentEmployeeList(department).stream()
                 .mapToDouble(emloyee -> emloyee.getSalary())
                 .sum();
         return departmentSalarySum;
-
     }
 }

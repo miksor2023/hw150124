@@ -29,7 +29,7 @@ public class DepartmentController {
     }
     @GetMapping("/employees")
     public Map getEmployeeListByDepartment(){
-        return departmentService.getEmployeeListByDepartment();
+        return departmentService.getEmployeeListSortedByDepartment();
     }
 
     @GetMapping("/{id}/salary/sum")
